@@ -10,9 +10,10 @@ namespace IdeaHelper
         // If Property is called, 'TryGetMember' is triggered.
         public override bool TryGetMember(GetMemberBinder binder, out object? result)
         {
-            if (_properties.ContainsKey(binder.Name))
+            var name = GetName(binder.Name);
+            if (_properties.ContainsKey(name))
             {
-                result = _properties[binder.Name];
+                result = _properties[name];
                 return true;
             }
             else
@@ -25,7 +26,7 @@ namespace IdeaHelper
         // Common set method.
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            _properties[binder.Name] = value;
+            _properties[GetName(binder.Name)] = value;
             return true;
         }
 
@@ -34,7 +35,7 @@ namespace IdeaHelper
         {
             try
             {
-                dynamic member = _properties[binder.Name];
+                dynamic member = _properties[GetName(binder.Name)];
                 result = member();
                 return true;
             }
@@ -43,6 +44,11 @@ namespace IdeaHelper
                 result = null;
                 return false;
             }
+        }
+
+        private static string GetName(string name)
+        {
+            return name?.ToLower();
         }
     }
 }
