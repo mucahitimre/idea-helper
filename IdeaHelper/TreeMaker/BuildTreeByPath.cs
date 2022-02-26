@@ -50,7 +50,11 @@
         private static TModel CreateModel<TModel>()
             where TModel : class, ITreeModel, INode<TModel>, new()
         {
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning disable CS8603 // Possible null reference return.
             return (TModel)Activator.CreateInstance(typeof(TModel));
+#pragma warning restore CS8603 // Possible null reference return.
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
         }
 
         private static string[] GetPathSplited<TFlat>(TFlat code)
