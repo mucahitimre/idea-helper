@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
-namespace IdeaHelper.TreeMaker.Models;
+﻿namespace IdeaHelper.TreeMaker.Models;
 
 public class DefaultTreeModel : ITreeModel, INode<DefaultTreeModel>
 {
