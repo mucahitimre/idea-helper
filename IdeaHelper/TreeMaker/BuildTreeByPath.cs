@@ -4,11 +4,11 @@ namespace IdeaHelper.TreeMaker;
 
 public class BuildTreeByPath
 {
-    public static List<TModel> Build<TModel, TFlat>(List<TFlat> flatList)
-        where TModel : class, ITreeModel, INode<TModel>, new()
+    public static List<TTree> Build<TTree, TFlat>(List<TFlat> flatList)
+        where TTree : class, ITreeModel, INode<TTree>, new()
         where TFlat : class, IPathable, new()
     {
-        var list = new List<TModel>();
+        var list = new List<TTree>();
         if (flatList == null || !flatList.Any())
         {
             return list;
@@ -16,7 +16,7 @@ public class BuildTreeByPath
 
         foreach (var flat in flatList)
         {
-            var parent = default(TModel);
+            var parent = default(TTree);
             var pathSplited = GetPathSplited(flat);
             foreach (var key in pathSplited)
             {
@@ -29,12 +29,12 @@ public class BuildTreeByPath
                 {
                     if (parent == null)
                     {
-                        parent = CreateModel<TModel>(key, flat.Path);
+                        parent = CreateModel<TTree>(key, flat.Path);
                         list.Add(parent);
                     }
                     else
                     {
-                        var data = CreateModel<TModel>(key, flat.Path);
+                        var data = CreateModel<TTree>(key, flat.Path);
                         parent.Childs.Add(data);
                         parent = data;
                     }
@@ -54,10 +54,10 @@ public class BuildTreeByPath
         where TModel : class, ITreeModel, INode<TModel>, new()
     {
         var model = (TModel)Activator.CreateInstance(typeof(TModel));
-        model.Childs = new List<TModel>();
         model.Key = key;
         model.Path = path;
         model.Type = GetType(key);
+        model.Childs = new List<TModel>();
 
         return model;
     }
