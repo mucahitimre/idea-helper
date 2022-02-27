@@ -6,7 +6,7 @@ namespace IdeaHelper.TreeMaker.Models;
 [JsonConverter(typeof(StringEnumConverter))]
 public enum Type
 {
-    Folder = 1, 
+    Folder = 1,
 
     File = 2
 }

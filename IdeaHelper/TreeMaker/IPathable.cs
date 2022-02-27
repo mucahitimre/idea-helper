@@ -1,7 +1,6 @@
-﻿namespace IdeaHelper.TreeMaker
+﻿namespace IdeaHelper.TreeMaker;
+
+public interface IPathable
 {
-    public interface IPathable
-    {
-        public string Path { get; set; }
-    }
+    public string Path { get; set; }
 }

@@ -1,13 +1,12 @@
 ﻿using Type = IdeaHelper.TreeMaker.Models.Type;
 
-namespace IdeaHelper.TreeMaker
+namespace IdeaHelper.TreeMaker;
+
+public interface ITreeModel
 {
-    public interface ITreeModel
-    {
-        public string Key { get; set; }
+    public string Key { get; set; }
 
-        public string Path { get; set; }
+    public string Path { get; set; }
 
-        public Type Type { get; set; }
-    }
+    public Type Type { get; set; }
 }
