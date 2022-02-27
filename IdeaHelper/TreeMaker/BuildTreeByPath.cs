@@ -45,7 +45,8 @@ public class BuildTreeByPath
         return list;
     }
 
-    private static TModel GetNode<TModel>(List<TModel> list, TModel parent, string key) where TModel : class, ITreeModel, INode<TModel>, new()
+    private static TModel GetNode<TModel>(List<TModel> list, TModel parent, string key) 
+        where TModel : class, ITreeModel, INode<TModel>, new()
     {
         return parent != null ? parent.Childs.FirstOrDefault(w => w.Key == key) : list.FirstOrDefault(w => w.Key == key);
     }
