@@ -1,4 +1,6 @@
-﻿namespace IdeaHelper.TreeMaker
+﻿using Type = IdeaHelper.TreeMaker.Models.Type;
+
+namespace IdeaHelper.TreeMaker
 {
     public class BuildTreeByPath
     {
@@ -18,7 +20,7 @@
                 var pathSplited = GetPathSplited(flat);
                 foreach (var key in pathSplited)
                 {
-                    var node = parent != null ? parent.Childs.FirstOrDefault(w => w.Key == key) : list.FirstOrDefault(w => w.Key == key);
+                    var node = GetNode(list, parent, key);
                     if (node != null)
                     {
                         parent = node;
@@ -27,16 +29,12 @@
                     {
                         if (parent == null)
                         {
-                            parent = CreateModel<TModel>();
-                            parent.Key = key;
-                            parent.Path = flat.Path;
+                            parent = CreateModel<TModel>(key, flat.Path);
                             list.Add(parent);
                         }
                         else
                         {
-                            var data = CreateModel<TModel>();
-                            data.Key = key;
-                            data.Path = flat.Path;
+                            var data = CreateModel<TModel>(key, flat.Path);
                             parent.Childs.Add(data);
                             parent = data;
                         }
@@ -47,14 +45,26 @@
             return list;
         }
 
-        private static TModel CreateModel<TModel>()
+        private static TModel GetNode<TModel>(List<TModel> list, TModel parent, string key) where TModel : class, ITreeModel, INode<TModel>, new()
+        {
+            return parent != null ? parent.Childs.FirstOrDefault(w => w.Key == key) : list.FirstOrDefault(w => w.Key == key);
+        }
+
+        private static TModel CreateModel<TModel>(string key, string path)
             where TModel : class, ITreeModel, INode<TModel>, new()
         {
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-#pragma warning disable CS8603 // Possible null reference return.
-            return (TModel)Activator.CreateInstance(typeof(TModel));
-#pragma warning restore CS8603 // Possible null reference return.
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+            var model = (TModel)Activator.CreateInstance(typeof(TModel));
+            model.Childs = new List<TModel>();
+            model.Key = key;
+            model.Path = path;
+            model.Type = GetType(key);
+
+            return model;
+        }
+
+        private static Type GetType(string key)
+        {
+            return key.Contains('.') ? Type.File : Type.Folder;
         }
 
         private static string[] GetPathSplited<TFlat>(TFlat code)
